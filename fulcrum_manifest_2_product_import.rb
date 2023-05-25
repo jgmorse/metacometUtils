@@ -40,13 +40,18 @@ CSV.open('data/4_products_heb.csv', 'w') do |output|
 
     #Get hebid and add it to the list of ISBNs
     hebids = [] #Yes some titles have multiple  
-    ids= input['Identifier(s)'].split('; ')
+    ids= input['Identifier(s)'].split(',')
     ids.each { |i|
-      if i.match(/^heb_id: ?heb((\d\d\d\d\d)\.\d\d\d\d\.\d\d\d)/)
+      if i.match(/^heb_id:heb((\d\d\d\d\d)\.\d\d\d\d\.\d\d\d)/)
         hebids.push("HEB#{$1}")
       end
     }
+    
+    puts hebids.length if hebids.length != 1
+    
+
     products = hebids + isbns_formats
+    puts products.join(' / ') if hebids.first.match(/^HEB00167/)
     projectID = hebids.first
     products.each {|i|
       row = CSV::Row.new(header,[])
@@ -54,7 +59,7 @@ CSV.open('data/4_products_heb.csv', 'w') do |output|
       #Figure out if this product ID is an HEBID or an ISBN
       productID = ''
 
-      if i.match(/^heb/)
+      if i.match(/^HEB/)
         row['Product ID'] = i
         row['Format'] = 'Ebook'
       else
@@ -72,7 +77,7 @@ CSV.open('data/4_products_heb.csv', 'w') do |output|
 
       end
 
-      row['Project ID'] = projectID
+      row['Project ID'] = hebids.first
       row['Description'] = input['Title']
       row['Publication Date'] = input['Pub Year']
       row['Ingestion Date'] = input['Date Uploaded']
