@@ -51,7 +51,6 @@ CSV.open('data/4_products_heb.csv', 'w') do |output|
     
 
     products = hebids + isbns_formats
-    puts products.join(' / ') if hebids.first.match(/^HEB00167/)
     projectID = hebids.first
     products.each {|i|
       row = CSV::Row.new(header,[])
@@ -79,8 +78,8 @@ CSV.open('data/4_products_heb.csv', 'w') do |output|
 
       row['Project ID'] = hebids.first
       row['Description'] = input['Title']
-      row['Publication Date'] = input['Pub Year']
-      row['Ingestion Date'] = input['Date Uploaded']
+      row['Publication Date'] = input['Pub Year'].match(/\d\d\d\d/) if input['Pub Year']
+      row['Ingestion Date'] = DateTime.parse(input['Date Uploaded']).strftime('%m/%d/%Y')
       row['Status'] = 'Available'
       row['Edition'] = input['Edition Name']
 
