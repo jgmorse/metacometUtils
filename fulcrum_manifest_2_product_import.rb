@@ -57,12 +57,24 @@ CSV.open('data/4_products_heb.csv', 'w') do |output|
       
       #Figure out if this product ID is an HEBID or an ISBN
       productID = ''
-
+      i.gsub(/\s+/, "")
       if i.match(/^HEB/)
         row['Product ID'] = i
-        row['Format'] = 'Ebook'
+        row['Format'] = 'HEB ID'
       else
-        i.match(/^(\d+)/) { row['Product ID'] = $1}
+        format = ''
+        isbn = ''
+        i.match(/^((\d\d\d)?-?\d-?\d-?\d-?\d-?\d-?\d-?\d-?\d-?\d-?\d)/)  {
+          isbn = $1.gsub("-", "")
+          if isbn.length == 13
+            row['Product ID'] = isbn
+          elsif isbn.length == 10
+            row['Product ID'] = ISBN.thirteen(isbn)
+          else
+            next #not an ISBN  
+          end
+        }
+        
         format = ''
         i.match(/\((.*?)\)/) { format = $1 }
         case format
