@@ -95,7 +95,7 @@ CSV.open('data/4_products_heb.csv', 'w') do |output|
       row['Project ID'] = hebids.first
       row['Description'] = input['Title']
       row['Publication Date'] = input['Pub Year'].match(/\d\d\d\d/) if input['Pub Year']
-      row['Ingestion Date'] = DateTime.parse(input['Date Uploaded']).strftime('%m/%d/%Y')
+      row['Ingestion Date'] = DateTime.parse(input['Date Uploaded']).strftime('%m/%d/%Y') if DateTime.parse(input['Date Uploaded']).strftime('%Y').to_i > 2018
       row['Status'] = 'Available'
       row['Edition'] = input['Edition Name']
 
