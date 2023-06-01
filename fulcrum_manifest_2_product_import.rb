@@ -80,9 +80,13 @@ CSV.open('data/4_products_heb.csv', 'w') do |output|
         case format
         when /ebook/i
           row['Format'] = 'Ebook'
+        when /pdf/i
+          row['Format'] = 'Ebook'
         when /paper/i
           row['Format'] = 'Paperback'
         when /hard/i
+          row['Format'] = 'Hardcover'
+        when /cloth/i
           row['Format'] = 'Hardcover'
         end
 
